@@ -84,6 +84,7 @@ class Customer(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
+
     def __str__(self):
         return self.name
 
@@ -94,24 +95,38 @@ class Product(models.Model):
     category = models.ManyToManyField(Category)
     description = models.TextField(max_length=500)
     quantity = models.PositiveIntegerField(default=0)
-    
+
     def __str__(self):
         return self.title
 
+
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete= models.CASCADE)
-    products = models.ManyToManyField(Product, through= OrderItem)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    products = models.ManyToManyField("Product", through="OrderItem")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     total_cost = models.DecimalField(default=0, max_digits=12, decimal_places=2)
-    STATUS_CHOICES =[ ('Ca','Canceled'),('Pn', 'Pending'), ('Co', 'Completed'), ('P', 'Processing'), ('S','Sent'),('R', 'Recieved')]
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='Pn')
-    
+    STATUS_CHOICES = [
+        ("Ca", "Canceled"),
+        ("Pn", "Pending"),
+        ("Co", "Completed"),
+        ("P", "Processing"),
+        ("S", "Sent"),
+        ("R", "Recieved"),
+    ]
+    status = models.CharField(
+        max_length=2, choices=STATUS_CHOICES, default="Pn"
+    )
+
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    # product: models.ForeignKey[Product, models.CASCADE]
     quantity = models.PositiveIntegerField(default=0)
+
     @property
-    def itemCost(self):
-        return self.quantity * self.product.price
-    
+    def itemCost(self) -> float:
+        return (
+            float(self.quantity * self.product.price) if self.product else 0.00
+        )
