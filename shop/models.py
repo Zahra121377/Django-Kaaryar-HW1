@@ -84,6 +84,8 @@ class Customer(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -91,3 +93,6 @@ class Product(models.Model):
     price = models.FloatField(default=0)
     category = models.ManyToManyField(Category)
     description = models.TextField(max_length=500)
+    
+    def __str__(self):
+        return self.title
