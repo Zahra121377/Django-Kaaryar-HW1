@@ -98,4 +98,12 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+class Order(models.Model):
+    user = models.ForeignKey(Customer, on_delete= models.CASCADE)
+    products = models.ManyToManyField(Product, through= OrderItem)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    total_cost = models.FloatField(default=0)
+    STATUS_CHOICES =[ ('Ca','Canceled'),('Pn', 'Pending'), ('Co', 'Completed'), ('P', 'Processing'), ('S','Sent'),('R', 'Recieved')]
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='Pn')
     
