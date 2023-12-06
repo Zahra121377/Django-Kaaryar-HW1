@@ -90,7 +90,7 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=200, blank=False)
-    price = models.FloatField(default=0)
+    price = models.DecimalField(default=0, max_digits=12, decimal_places=2)
     category = models.ManyToManyField(Category)
     description = models.TextField(max_length=500)
     quantity = models.PositiveIntegerField(default=0)
@@ -99,11 +99,19 @@ class Product(models.Model):
         return self.title
 
 class Order(models.Model):
-    user = models.ForeignKey(Customer, on_delete= models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete= models.CASCADE)
     products = models.ManyToManyField(Product, through= OrderItem)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    total_cost = models.FloatField(default=0)
+    total_cost = models.DecimalField(default=0, max_digits=12, decimal_places=2)
     STATUS_CHOICES =[ ('Ca','Canceled'),('Pn', 'Pending'), ('Co', 'Completed'), ('P', 'Processing'), ('S','Sent'),('R', 'Recieved')]
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='Pn')
+    
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
+    @property
+    def itemCost(self):
+        return self.quantity * self.product.price
     
