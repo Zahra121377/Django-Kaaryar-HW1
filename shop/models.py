@@ -93,6 +93,9 @@ class Product(models.Model):
     price = models.FloatField(default=0)
     category = models.ManyToManyField(Category)
     description = models.TextField(max_length=500)
+    quantity = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return self.title
+
+    
