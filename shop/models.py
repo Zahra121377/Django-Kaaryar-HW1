@@ -70,10 +70,13 @@ class Customer(models.Model):
     )
     email = models.EmailField()
     password = models.CharField(
-        validators=[MinLengthValidator(limit_value=8), validate_password]
+        max_length=20,
+        validators=[MinLengthValidator(limit_value=8), validate_password],
     )
-    address = models.CharField(validators=[MinLengthValidator(limit_value=10)])
-    postal_code = models.IntegerField(max_length=15)
+    address = models.CharField(
+        max_length=1000, validators=[MinLengthValidator(limit_value=10)]
+    )
+    postal_code = models.IntegerField()
 
     def __str__(self):
         return self.first_name + " " + self.last_name
