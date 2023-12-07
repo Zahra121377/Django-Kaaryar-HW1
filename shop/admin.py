@@ -1,6 +1,14 @@
 from django.contrib import admin
 
-from .models import Category, Customer, Product, Order, OrderItem, Seller, Payment
+from .models import (
+    Category,
+    Customer,
+    Order,
+    OrderItem,
+    Payment,
+    Product,
+    Seller,
+)
 
 # Register your models here.
 admin.site.register(Customer)

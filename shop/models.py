@@ -1,4 +1,5 @@
 import re
+
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import models
@@ -86,6 +87,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
     class Meta:
         verbose_name_plural = "Categories"
 
@@ -93,16 +95,20 @@ class Category(models.Model):
 class Seller(Customer):
     verified = models.BooleanField(default=False)
     bank_account_number = models.CharField(max_length=20)
-    stars = models.PositiveIntegerField(default=0)  
-    
+    stars = models.PositiveIntegerField(default=0)
+
+
 class Product(models.Model):
     title = models.CharField(max_length=200, blank=False)
     price = models.DecimalField(default=0, max_digits=12, decimal_places=2)
     category = models.ManyToManyField(Category)
     description = models.TextField(max_length=500)
     quantity = models.PositiveIntegerField(default=0)
-    satisfaction_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE )
+    satisfaction_percentage = models.DecimalField(
+        max_digits=5, decimal_places=2, default=0.0
+    )
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+
     def __str__(self):
         return self.title
 
@@ -135,7 +141,8 @@ class OrderItem(models.Model):
         return (
             float(self.quantity * self.product.price) if self.product else 0.00
         )
-        
+
+
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=20, decimal_places=2)
