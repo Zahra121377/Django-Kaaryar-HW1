@@ -93,7 +93,7 @@ class Category(models.Model):
 class Seller(Customer):
     verified = models.BooleanField(default=False)
     bank_account_number = models.CharField(max_length=20)
-    
+    stars = models.PositiveIntegerField(default=0)  # Added stars field for rating
     
 class Product(models.Model):
     title = models.CharField(max_length=200, blank=False)
