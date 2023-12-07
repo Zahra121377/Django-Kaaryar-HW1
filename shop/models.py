@@ -101,6 +101,7 @@ class Product(models.Model):
     category = models.ManyToManyField(Category)
     description = models.TextField(max_length=500)
     quantity = models.PositiveIntegerField(default=0)
+    satisfaction_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.0)
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE )
     def __str__(self):
         return self.title
