@@ -90,13 +90,18 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
 
+class Seller(Customer):
+    verified = models.BooleanField(default=False)
+    bank_account_number = models.CharField(max_length=20)
+    
+    
 class Product(models.Model):
     title = models.CharField(max_length=200, blank=False)
     price = models.DecimalField(default=0, max_digits=12, decimal_places=2)
     category = models.ManyToManyField(Category)
     description = models.TextField(max_length=500)
     quantity = models.PositiveIntegerField(default=0)
-
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE )
     def __str__(self):
         return self.title
 
@@ -129,4 +134,3 @@ class OrderItem(models.Model):
         return (
             float(self.quantity * self.product.price) if self.product else 0.00
         )
-
