@@ -107,7 +107,7 @@ class Product(models.Model):
     satisfaction_percentage = models.DecimalField(
         max_digits=5, decimal_places=2, default=0.0
     )
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE, default=0)
 
     def __str__(self):
         return self.title
