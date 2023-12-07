@@ -1,5 +1,4 @@
 import re
-
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.db import models
@@ -104,7 +103,6 @@ class Product(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    products = models.ManyToManyField("Product", through="OrderItem")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     total_cost = models.DecimalField(default=0, max_digits=12, decimal_places=2)
@@ -124,7 +122,6 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    # product: models.ForeignKey[Product, models.CASCADE]
     quantity = models.PositiveIntegerField(default=0)
 
     @property
@@ -132,3 +129,4 @@ class OrderItem(models.Model):
         return (
             float(self.quantity * self.product.price) if self.product else 0.00
         )
+
