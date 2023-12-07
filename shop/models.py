@@ -93,7 +93,7 @@ class Category(models.Model):
 class Seller(Customer):
     verified = models.BooleanField(default=False)
     bank_account_number = models.CharField(max_length=20)
-    stars = models.PositiveIntegerField(default=0)  # Added stars field for rating
+    stars = models.PositiveIntegerField(default=0)  
     
 class Product(models.Model):
     title = models.CharField(max_length=200, blank=False)
@@ -135,3 +135,9 @@ class OrderItem(models.Model):
         return (
             float(self.quantity * self.product.price) if self.product else 0.00
         )
+        
+class Payment(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=20, decimal_places=2)
+    payment_date = models.DateTimeField(auto_now_add=True)
+    completed = models.BooleanField(default=False)
